@@ -11,16 +11,14 @@ public class Emetteur implements Runnable {
 
     private LinkedBlockingQueue<Message> canalDeCommunication;
     private boolean exit;
-    private String stringToSend;
 
     public Emetteur(LinkedBlockingQueue<Message> canalDeCommunication) {
-        this(canalDeCommunication, "", false);
+        this(canalDeCommunication, false);
     }
 
-    private Emetteur(LinkedBlockingQueue<Message> canalDeCommunication, String stringToSend, boolean exit) {
+    private Emetteur(LinkedBlockingQueue<Message> canalDeCommunication,  boolean exit) {
         if(canalDeCommunication != null){
             this.canalDeCommunication = canalDeCommunication;
-            this.stringToSend = stringToSend;
             this.exit = exit;
         }
         else
@@ -42,7 +40,7 @@ public class Emetteur implements Runnable {
                     MessageDeCommande messageToSend = new MessageDeCommande("FIN");
                     if(messageToSend != null)
                         canalDeCommunication.put(messageToSend); // Envoi d'un message de commande
-                    break;
+                    //break;
                 } else {
                     MessageDeDonnees messageToSend = new MessageDeDonnees(input);
                     if(messageToSend != null)

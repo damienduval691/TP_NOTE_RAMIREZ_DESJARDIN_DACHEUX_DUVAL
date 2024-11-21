@@ -11,16 +11,14 @@ public class Recepteur implements Runnable {
 
     private LinkedBlockingQueue<Message> canalDeCommunication;
     private boolean exit;
-    private String stringToBring;
 
     public Recepteur(LinkedBlockingQueue<Message> canalDeCommunication) {
-        this(canalDeCommunication, "", false);
+        this(canalDeCommunication,  false);
     }
 
-    private Recepteur(LinkedBlockingQueue<Message> canalDeCommunication, String stringToBring, boolean exit) {
+    private Recepteur(LinkedBlockingQueue<Message> canalDeCommunication, boolean exit) {
         if(canalDeCommunication != null){
             this.canalDeCommunication = canalDeCommunication;
-            this.stringToBring = stringToBring;
             this.exit = exit;
         }
         else
@@ -46,7 +44,7 @@ public class Recepteur implements Runnable {
                     System.out.println("Commande reçue : " + command);
                     if ("FIN".equals(command)) {
                         System.out.println("Tâche Réceptrice arrêtée.");
-                        break; // Arrête la tâche si la commande est "FIN"
+                        //break; // Arrête la tâche si la commande est "FIN"
                     }
                 }
             }
