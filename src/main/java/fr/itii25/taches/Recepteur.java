@@ -33,8 +33,11 @@ public class Recepteur implements Runnable {
 
     @Override
     public void run() {
+
+        exit = true;
+
         try {
-            while (true) {
+            while (exit) {
                 Message message = canalDeCommunication.take(); // Récupération du message
                 if (message instanceof MessageDeDonnees) {
                     System.out.println("Données reçues : " + ((MessageDeDonnees) message).getMessageDeDonnee());

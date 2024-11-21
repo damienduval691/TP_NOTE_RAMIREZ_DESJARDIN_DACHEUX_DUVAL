@@ -36,7 +36,7 @@ public class Emetteur implements Runnable {
         exit = true;
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Entrez vos messages (tapez 'FIN' pour terminer) :");
-            while (!exit) {
+            while (exit) {
                 String input = scanner.nextLine();
                 if ("FIN".equalsIgnoreCase(input)) {
                     MessageDeCommande messageToSend = new MessageDeCommande("FIN");
