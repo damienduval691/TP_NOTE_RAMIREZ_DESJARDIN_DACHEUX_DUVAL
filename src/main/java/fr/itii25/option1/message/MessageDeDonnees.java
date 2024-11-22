@@ -6,7 +6,7 @@ public class MessageDeDonnees extends Message{
 
     //Constructeur en paramètre le messageDeDonnee
     public MessageDeDonnees(String messageDeDonnee) {
-        //On vérifie si le paramètre passé existe bien en mémoire, sinon on envoie une erreur
+        //On vérifie si le paramètre passé existe bien en mémoire, sinon
         if (messageDeDonnee == null)
             throw new IllegalArgumentException("messageDeDonnee is null");
         else if(messageDeDonnee.isBlank())

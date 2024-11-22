@@ -1,8 +1,8 @@
 package fr.itii25.option2.taches;
 
-import fr.itii25.option1.message.Message;
-import fr.itii25.option1.message.MessageDeCommande;
-import fr.itii25.option1.message.MessageDeDonnees;
+import fr.itii25.option2.message.Message;
+import fr.itii25.option2.message.MessageDeCommande;
+import fr.itii25.option2.message.MessageDeDonnees;
 
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -44,8 +44,17 @@ public class Emetteur implements Runnable {
                     canalDonnees.put(messageToSend); // Envoi d'un message de commande
                     stop();
                 } else {
-                    MessageDeDonnees messageToSend = new MessageDeDonnees(input);
-                    canalDonnees.put(messageToSend); // Envoi d'un message de données
+                    try {
+                        //Récupération des données de la tables actor et envoie dans le canal de communication
+                        rs = stmtMYSQL.executeQuery(requeteGetAllActor);
+                        System.out.println(rs.getString(1));
+                        MessageDeDonnees messageToSend = new MessageDeDonnees(rs);
+                        canalDonnees.put(messageToSend); // Envoi d'un message de données
+                        System.out.println("Message envoyé.");
+                    } catch (SQLException e) {
+                        System.out.println("Erreur avec executeQuery, impossible de récupérer les données.");
+                        e.printStackTrace();
+                    }
                 }
             }
         } catch (InterruptedException E){

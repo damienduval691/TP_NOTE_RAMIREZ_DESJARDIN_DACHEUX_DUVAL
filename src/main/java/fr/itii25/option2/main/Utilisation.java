@@ -1,8 +1,8 @@
 package fr.itii25.option2.main;
 
-import fr.itii25.option1.message.Message;
-import fr.itii25.option1.taches.Emetteur;
-import fr.itii25.option1.taches.Recepteur;
+import fr.itii25.option2.message.Message;
+import fr.itii25.option2.taches.Emetteur;
+import fr.itii25.option2.taches.Recepteur;
 
 import java.util.concurrent.LinkedBlockingQueue;
 

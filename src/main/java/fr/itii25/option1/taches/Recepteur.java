@@ -12,7 +12,7 @@ public class Recepteur implements Runnable {
     private boolean exit;
 
     public Recepteur(LinkedBlockingQueue<Message> canalDeCommunication) {
-        this(canalDeCommunication,  false);
+        this(canalDeCommunication,  true);
     }
 
     //Constructeur complet avec en passage le canal de communication
