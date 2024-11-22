@@ -142,5 +142,12 @@ public class Recepteur implements Runnable {
             Thread.currentThread().interrupt();
             System.out.println("Tâche Réceptrice interrompue.");
         }
+
+        try {
+            cxPOSTGRE.close();
+        } catch (SQLException e) {
+            System.out.println("Erreur de cloture de la JDBC POSTGRE.");
+            e.printStackTrace();
+        }
     }
 }

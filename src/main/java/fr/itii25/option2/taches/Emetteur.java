@@ -13,7 +13,7 @@ public class Emetteur implements Runnable {
     private boolean exit;
 
     public Emetteur(LinkedBlockingQueue<Message> canalDeCommunication) {
-        this(canalDeCommunication, false);
+        this(canalDeCommunication, true);
     }
 
     //Constructeur complet avec en passage le canal de communication
@@ -33,28 +33,65 @@ public class Emetteur implements Runnable {
 
     @Override
     public void run() {
-        exit = true;
+        ResultSet resultatSelect = null;
+        //Ajouts des drives des JDBC
+        String nomDriverJDBCMYSQL      = "com.mysql.cj.jdbc.Driver";
+
+        //Ajouts des liens vers les JDBC
+        String urlJDBCMYSQL = "jdbc:mysql://localhost:3306/sakila";
+
+        //Chargement du driver pour la JDBC MYSQL
+        try {
+            Class.forName(nomDriverJDBCMYSQL);
+        } catch (ClassNotFoundException e) {
+            System.out.println("Erreur de chargement du driver : nomDriverJDBCMYSQL");
+            e.printStackTrace();
+        }
+
+        //Connexion à la base de donnée MYSQL
+        Connection cxMYSQL = null;
+        try {
+            cxMYSQL = DriverManager.getConnection(urlJDBCMYSQL,"sakila","p_ssW0rd");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erreur de connexion : JDBCMYSQL");
+        }
+
+        //Utilisation de l'interface statement
+        Statement stmtMYSQL = null;
+        try {
+            stmtMYSQL = cxMYSQL.createStatement();
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la création du statement MYSQL");
+            e.printStackTrace();
+        }
+
+        //Déclaration des objets pour récupérer les données de la table acteur
+        String requeteGetAllActor = "SELECT * FROM actor;";
+        ResultSet rs = null;
+        try {
+            //Récupération des données de la tables actor et envoie dans le canal de communication
+            rs = stmtMYSQL.executeQuery(requeteGetAllActor);
+            MessageDeDonnees messageToSend = new MessageDeDonnees(rs);
+            canalDonnees.put(messageToSend); // Envoi d'un message de données
+            System.out.println("Message envoyé.");
+        } catch (SQLException e) {
+            System.out.println("Erreur avec executeQuery, impossible de récupérer les données.");
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        //Récupération des interactions utilisateurs
         try (Scanner scanner = new Scanner(System.in)) {
             //On envoie tant que l'utilisateur n'a pas tapé FIN
-            System.out.println("Entrez votre message (tapez 'FIN' pour terminer) :");
+            System.out.println("Tapez 'FIN' pour terminer le programme :");
             while (exit) {
                 String input = scanner.nextLine();
                 if ("FIN".equalsIgnoreCase(input)) {
                     MessageDeCommande messageToSend = new MessageDeCommande("FIN");
                     canalDonnees.put(messageToSend); // Envoi d'un message de commande
                     stop();
-                } else {
-                    try {
-                        //Récupération des données de la tables actor et envoie dans le canal de communication
-                        rs = stmtMYSQL.executeQuery(requeteGetAllActor);
-                        System.out.println(rs.getString(1));
-                        MessageDeDonnees messageToSend = new MessageDeDonnees(rs);
-                        canalDonnees.put(messageToSend); // Envoi d'un message de données
-                        System.out.println("Message envoyé.");
-                    } catch (SQLException e) {
-                        System.out.println("Erreur avec executeQuery, impossible de récupérer les données.");
-                        e.printStackTrace();
-                    }
                 }
             }
         } catch (InterruptedException E){

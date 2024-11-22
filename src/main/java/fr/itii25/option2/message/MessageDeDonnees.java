@@ -1,24 +1,21 @@
 package fr.itii25.option2.message;
 
-public class MessageDeDonnees extends Message {
+import java.sql.ResultSet;
 
-    private String messageDeDonnee;
+public class MessageDeDonnees<TypeDeMessageDeDonnee> extends Message {
+
+    private TypeDeMessageDeDonnee messageDeDonnee;
 
     //Constructeur en paramètre le messageDeDonnee
-    public MessageDeDonnees(String messageDeDonnee) {
+    public MessageDeDonnees(TypeDeMessageDeDonnee messageDeDonnee) {
         //On vérifie si le paramètre passé existe bien en mémoire, sinon on envoie une erreur
         if (messageDeDonnee == null)
             throw new IllegalArgumentException("messageDeDonnee is null");
-        else if(messageDeDonnee.isBlank())
-            System.out.println("Le message est vide !");
         else this.messageDeDonnee = messageDeDonnee;
 
     }
 
-    public String getMessageDeDonnee(){
+    public TypeDeMessageDeDonnee getMessageDeDonnee(){
         return messageDeDonnee;
     }
-
-
-
 }

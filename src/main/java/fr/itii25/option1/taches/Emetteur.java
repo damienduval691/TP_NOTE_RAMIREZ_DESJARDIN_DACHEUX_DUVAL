@@ -13,7 +13,7 @@ public class Emetteur implements Runnable {
     private boolean exit;
 
     public Emetteur(LinkedBlockingQueue<Message> canalDeCommunication) {
-        this(canalDeCommunication, false);
+        this(canalDeCommunication, true);
     }
 
     //Constructeur complet avec en passage le canal de communication
@@ -33,7 +33,6 @@ public class Emetteur implements Runnable {
 
     @Override
     public void run() {
-        exit = true;
         try (Scanner scanner = new Scanner(System.in)) {
             //On envoie tant que l'utilisateur n'a pas tapé FIN
             System.out.println("Entrez votre message (tapez 'FIN' pour terminer) :");
