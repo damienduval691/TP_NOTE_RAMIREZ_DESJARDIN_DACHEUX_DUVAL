@@ -1,10 +1,9 @@
-package fr.itii25.taches;
+package fr.itii25.option2.taches;
 
-import fr.itii25.message.Message;
-import fr.itii25.message.MessageDeCommande;
-import fr.itii25.message.MessageDeDonnees;
+import fr.itii25.option1.message.Message;
+import fr.itii25.option1.message.MessageDeCommande;
+import fr.itii25.option1.message.MessageDeDonnees;
 
-import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Recepteur implements Runnable {
@@ -16,6 +15,8 @@ public class Recepteur implements Runnable {
         this(canalDeCommunication,  false);
     }
 
+    //Constructeur complet avec en passage le canal de communication
+    // + vérification que le canal de communication existe bien en base
     private Recepteur(LinkedBlockingQueue<Message> canalDeCommunication, boolean exit) {
         if(canalDeCommunication != null){
             this.canalDeCommunication = canalDeCommunication;
@@ -35,6 +36,7 @@ public class Recepteur implements Runnable {
         exit = true;
 
         try {
+            //On envoie tant que l'utilisateur n'a pas tapé FIN
             while (exit) {
                 Message message = canalDeCommunication.take(); // Récupération du message
                 if (message instanceof MessageDeDonnees) {
@@ -44,7 +46,7 @@ public class Recepteur implements Runnable {
                     System.out.println("Commande reçue : " + command);
                     if ("FIN".equals(command)) {
                         System.out.println("Tâche Réceptrice arrêtée.");
-                        //break; // Arrête la tâche si la commande est "FIN"
+                        stop();
                     }
                 }
             }
