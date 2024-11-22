@@ -100,39 +100,35 @@ public class Recepteur implements Runnable {
                 if (message instanceof MessageDeDonnees) {
                     ResultSet values = ((MessageDeDonnees<ResultSet>) message).getMessageDeDonnee();
 
-                    System.out.println("Données reçues : " + ((MessageDeDonnees) message).getMessageDeDonnee());
+                    System.out.println("Données reçues : " + values);
                     try{
                         int i = 0;
                         String parametres = "";
 
                         while(values.next()){
                             i++;
-                            int id              = values.getInt(0);
-                            String FName        = values.getString(1);
-                            String LName        = values.getString(2);
-                            Timestamp DateTime  = values.getTimestamp(3);
+                            int id              = values.getInt(1);
+                            String FName        = values.getString(2);
+                            String LName        = values.getString(3);
+                            Timestamp DateTime  = values.getTimestamp(4);
 
-                            System.out.println(id+" ,"+FName+" ,"+LName+" ,"+DateTime);
+                            parametres = "("+id+",'"+FName+"','"+LName+"','"+DateTime+"');";
 
-                            parametres = "("+id+" ,"+FName+" ,"+LName+" ,"+DateTime+");";
+                            requeteInsert = "INSERT INTO ACTOR " +
+                                    "(actor_id, first_name, last_name, last_update)" +
+                                    "VALUES " + parametres;
+
+                            try {
+                                stmt.executeUpdate(requeteInsert);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
-                        requeteInsert = "INSERT INTO ACTOR " +
-                                "(actor_id, first_name, last_name, last_update)" +
-                                "VALUES "+ parametres;
 
-                        System.out.println("Voici la table actor !");
                     } catch (SQLException e){
-
+                        System.out.println("Insert non réussi.");
+                        e.printStackTrace();
                     }
-
-                    try {
-                        stmt.executeUpdate(requeteInsert);
-                        System.out.println("Insertion réussie");
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-
-
                 } else if (message instanceof MessageDeCommande) {
                     String command = ((MessageDeCommande) message).getMessageDeCommande();
                     System.out.println("Commande reçue : " + command);
