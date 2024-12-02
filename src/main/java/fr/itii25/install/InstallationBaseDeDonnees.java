@@ -16,7 +16,14 @@ public class InstallationBaseDeDonnees {
 
 
             if(os.contains("win")){
-                scriptPath = System.getProperty("user.dir") + "src\\main\\java\\fr\\itii25\\install\\TelechargementBaseDeDonnees.ps1";
+                scriptPath = System.getProperty("user.dir")
+                        + File.separator + "src"
+                        + File.separator + "main"
+                        + File.separator + "java"
+                        + File.separator + "fr"
+                        + File.separator + "itii25"
+                        + File.separator + "install"
+                        + File.separator + "TelechargementBaseDeDonnees.ps1";
                 command = new String[]{
                         "powershell.exe", // Commande pour PowerShell
                         "-NoProfile",    // Exécute sans charger le profil utilisateur
@@ -25,7 +32,15 @@ public class InstallationBaseDeDonnees {
                 };
             }
             else  {
-                scriptPath = System.getProperty("user.dir") + "\\src\\main\\java\\fr\\itii25\\install\\TelechargementBaseDeDonnees.sh";
+                scriptPath = System.getProperty("user.dir")
+                        + File.separator + "src"
+                        + File.separator + "main"
+                        + File.separator + "java"
+                        + File.separator + "fr"
+                        + File.separator + "itii25"
+                        + File.separator + "install"
+                        + File.separator + "TelechargementBaseDeDonnees.sh";
+
                 File scriptFile = new File(scriptPath);
                  command = new String[]{
                         "/bin/bash", // Interpréteur Bash

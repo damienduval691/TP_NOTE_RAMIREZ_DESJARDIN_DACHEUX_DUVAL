@@ -15,7 +15,14 @@ public class LancementDesConteneursDocker {
 
 
             if(os.contains("win")){
-                scriptPath = System.getProperty("user.dir") + "\\src\\main\\java\\fr\\itii25\\install\\ChargementDesConteneursDockers.ps1";
+                scriptPath = System.getProperty("user.dir")
+                        + File.separator + "src"
+                        + File.separator + "main"
+                        + File.separator + "java"
+                        + File.separator + "fr"
+                        + File.separator + "itii25"
+                        + File.separator + "install"
+                        + File.separator + "ChargementDesConteneursDockers.ps1";
                 command = new String[]{
                         "powershell.exe", // Commande pour PowerShell
                         "-NoProfile",    // Exécute sans charger le profil utilisateur
@@ -24,7 +31,14 @@ public class LancementDesConteneursDocker {
                 };
             }
             else  {
-                scriptPath = System.getProperty("user.dir") + "\\src\\main\\java\\fr\\itii25\\install\\ChargementDesConteneursDockers.sh";
+                scriptPath = System.getProperty("user.dir")
+                        + File.separator + "src"
+                        + File.separator + "main"
+                        + File.separator + "java"
+                        + File.separator + "fr"
+                        + File.separator + "itii25"
+                        + File.separator + "install"
+                        + File.separator + "ChargementDesConteneursDockers.sh";
                 File scriptFile = new File(scriptPath);
 
                 // Vérifier si le fichier PowerShell existe
