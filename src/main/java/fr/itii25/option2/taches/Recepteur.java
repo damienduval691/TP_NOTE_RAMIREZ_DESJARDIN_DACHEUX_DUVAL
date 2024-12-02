@@ -104,8 +104,6 @@ public class Recepteur implements Runnable {
                 String requeteInsert = "";
                 if (message instanceof MessageDeDonnees) {
                     ResultSet values = ((MessageDeDonnees<ResultSet>) message).getMessageDeDonnee();
-
-                    System.out.println("Données reçues : " + values);
                     try{
                         int i = 0;
                         String parametres = "";

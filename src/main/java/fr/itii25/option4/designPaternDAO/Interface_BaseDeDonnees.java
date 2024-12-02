@@ -1,5 +1,8 @@
-package fr.itii25.option3.designPaternDAO;
-import java.sql.*;
+package fr.itii25.option4.designPaternDAO;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public interface Interface_BaseDeDonnees {
 

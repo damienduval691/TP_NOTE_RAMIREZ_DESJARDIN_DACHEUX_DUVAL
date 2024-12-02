@@ -1,11 +1,13 @@
-package fr.itii25.option3.taches;
+package fr.itii25.option4.taches;
 
-import fr.itii25.option3.message.MessageDeCommande;
-import fr.itii25.option3.message.MessageDeDonnees;
-import fr.itii25.option3.designPaternDAO.ImplementerBaseDeDonnes;
-import fr.itii25.option3.message.Message;
+import fr.itii25.option4.designPaternDAO.ImplementerBaseDeDonnes;
+import fr.itii25.option4.message.Message;
+import fr.itii25.option4.message.MessageDeCommande;
+import fr.itii25.option4.message.MessageDeDonnees;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Recepteur implements Runnable {
