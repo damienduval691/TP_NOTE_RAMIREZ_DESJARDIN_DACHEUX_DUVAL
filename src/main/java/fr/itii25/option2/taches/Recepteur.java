@@ -64,7 +64,8 @@ public class Recepteur implements Runnable {
                 "(actor_id INT," +
                 "first_name VARCHAR(50)," +
                 "last_name VARCHAR(50)," +
-                "last_update TIMESTAMP);";
+                "last_update TIMESTAMP," +
+                "actor_datecre TIMESTAMP);";
 
 
         Statement stmt=null;
@@ -111,15 +112,15 @@ public class Recepteur implements Runnable {
 
                         while(values.next()){
                             i++;
-                            int id              = values.getInt(1);
-                            String FName        = values.getString(2);
-                            String LName        = values.getString(3);
-                            Timestamp DateTime  = values.getTimestamp(4);
+                            int id                  = values.getInt(1);
+                            String FName            = values.getString(2);
+                            String LName            = values.getString(3);
+                            Timestamp DateTime      = values.getTimestamp(4);
 
-                            parametres = "("+id+",'"+FName+"','"+LName+"','"+DateTime+"');";
+                            parametres = "("+id+",'"+FName+"','"+LName+"','"+DateTime+"',CURRENT_TIMESTAMP);";
 
                             requeteInsert = "INSERT INTO ACTOR " +
-                                    "(actor_id, first_name, last_name, last_update)" +
+                                    "(actor_id, first_name, last_name, last_update, actor_datecre)" +
                                     "VALUES " + parametres;
 
                             try {

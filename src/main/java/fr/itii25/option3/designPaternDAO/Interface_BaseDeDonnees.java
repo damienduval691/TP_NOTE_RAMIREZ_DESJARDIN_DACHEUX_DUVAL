@@ -13,18 +13,13 @@ public interface Interface_BaseDeDonnees {
      * Établit une connexion à la base de données.
      * @return Connection Objet Connection connecté à la base de données
      */
-    public Connection connexion();
+    public Connection connexion() throws SQLException;
 
     /**
      * Méthode pour vérifier l'état de la connexion.
      */
-    public boolean estConnectee();
+    public boolean estConnectee() throws SQLException;
 
-    /**
-     * Creer une base de donnees
-     * @param nomBaseDeDonnees nom de la base de donnees
-     */
-    public void creerBaseDeDonnees(String nomBaseDeDonnees);
 
     /**
      * Méthode pour créer une table.
@@ -33,21 +28,22 @@ public interface Interface_BaseDeDonnees {
      * String structureTableau = "id SERIAL PRIMARY KEY, nom VARCHAR(50), age INTEGER";
      * dbConnection.creerTableau("Personnes", structureTableau);
      */
-    public void creerTableau(String nomTableau, String structureTableau);
+    public void creerTableau(String nomTableau, String structureTableau) throws SQLException;
 
     /**
      * Consulter les donnees à travers d'un requete
      * @param requete Requete de consultation
      * @return ResultSet Objet ResultSet de la consultation de la requete
      */
-    public ResultSet consulterDonnees(String requete);
+    public ResultSet consulterDonnees(String requete) throws SQLException;
 
+    public void insererDeDonnees(String nomTableau, String structureTableau, String donneesTableau) throws SQLException;
 
-
+    public void effacerDonnees(String requete) throws SQLException;
     /**
      * Ferme la connexion à la base de données.
      */
-    public void deconectee();
+    public void deconectee() throws SQLException;
 
 
 

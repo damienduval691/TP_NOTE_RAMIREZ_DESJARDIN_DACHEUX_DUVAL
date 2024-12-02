@@ -46,6 +46,19 @@ public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees
     }
 
     /**
+     * Méthode pour vérifier l'état de la connexion.
+     */
+
+    public boolean estConnectee() {
+        try {
+            return connection != null && !connection.isClosed();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * Ferme la connexion à la base de données.
      */
     public void deconectee() {
@@ -77,19 +90,6 @@ public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees
     }
 
     /**
-     * Méthode pour vérifier l'état de la connexion.
-     */
-
-    public boolean estConnectee() {
-        try {
-            return connection != null && !connection.isClosed();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
      * Consulter les donnees
      * @param requete Requete de consultation
      */
@@ -107,11 +107,31 @@ public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees
         return rs;
     }
 
+
     /**
-     * Creer une base de donnees
-     * @param nomBaseDeDonnees nom de la base de donnees
+     * Inserer de donnees dans un tableau
+     * @param nomTableau nom du Tableau
+     * @param structureTableau structure du Tableau
+     * @param donneesTableau donnees du Tableau
      */
-    public void creerBaseDeDonnees(String nomBaseDeDonnees) {
+    public void insererDeDonnees(String nomTableau, String structureTableau, String donneesTableau) {
+        String query = "INSERT INTO " + nomTableau + " (" + structureTableau + ") VALUES ("+ donneesTableau+ ")";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(query);
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la création de la table : " + nomTableau);
+            e.printStackTrace();
+        }
+    }
+
+    public void effacerDonnees(String nomTableau){
+        String query = "DELETE FROM " + nomTableau;
+        try (Statement stmt = connection.createStatement()) {
+            stmt.executeUpdate(query);
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la création de la table : " + nomTableau);
+            e.printStackTrace();
+        }
 
     }
 }

@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 
 # Afficher un message d'information
 echo "Mise à jour des images Docker pour PostgreSQL et SakilaDB/MySQL..."

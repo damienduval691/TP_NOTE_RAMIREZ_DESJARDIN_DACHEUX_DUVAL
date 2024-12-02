@@ -49,32 +49,38 @@ public class Emetteur implements Runnable {
         dbMySQL.connexion();
 
         String requeteGetAllActor = "SELECT * FROM actor;";
-        ResultSet rs = dbMySQL.consulterDonnees(requeteGetAllActor);
-
-
-
-        try {
-            //Récupération des données de la tables actor et envoie dans le canal de communication
-            rs = dbMySQL.consulterDonnees(requeteGetAllActor);
-            MessageDeDonnees messageToSend = new MessageDeDonnees(rs);
-            canalDonnees.put(messageToSend); // Envoi d'un message de données
-            System.out.println("Message envoyé.");
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-
+        ResultSet rs = null;
 
         //Récupération des interactions utilisateurs
         try (Scanner scanner = new Scanner(System.in)) {
-            //On envoie tant que l'utilisateur n'a pas tapé FIN
-            System.out.println("Tapez 'FIN' pour terminer le programme :");
+            //On donne des options de commande à l'utilisateur :
+            System.out.println("Choisissez une option :");
+            System.out.println("1 - Lancez l'acquisition des données");
+            System.out.println("2 - Afficher les données de la table de réception");
+            System.out.println("3 - Supprimez les données de la table de réception");
+            System.out.println("FIN - Terminer le programme");
             while (exit) {
                 String input = scanner.nextLine();
                 if ("FIN".equalsIgnoreCase(input)) {
                     MessageDeCommande messageToSend = new MessageDeCommande("FIN");
                     canalDonnees.put(messageToSend); // Envoi d'un message de commande
                     stop();
+                } else if ("1".equalsIgnoreCase(input)) {
+                    try {
+                        //Récupération des données de la tables actor et envoie dans le canal de communication
+                        rs = dbMySQL.consulterDonnees(requeteGetAllActor);
+                        MessageDeDonnees messageToSend = new MessageDeDonnees(rs);
+                        canalDonnees.put(messageToSend); // Envoi d'un message de données
+                        System.out.println("Message envoyé.");
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else if ("2".equalsIgnoreCase(input)) {
+                    MessageDeCommande messageToSend = new MessageDeCommande("2");
+                    canalDonnees.put(messageToSend); // Envoi d'un message de commande
+                } else if ("3".equalsIgnoreCase(input)) {
+                MessageDeCommande messageToSend = new MessageDeCommande("3");
+                canalDonnees.put(messageToSend); // Envoi d'un message de commande
                 }
             }
         } catch (InterruptedException E){

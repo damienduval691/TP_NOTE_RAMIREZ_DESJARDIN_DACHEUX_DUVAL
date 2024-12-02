@@ -1,9 +1,13 @@
 package fr.itii25.option2.taches;
 
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.core.DockerClientBuilder;
 import fr.itii25.option2.message.Message;
 import fr.itii25.option2.message.MessageDeCommande;
 import fr.itii25.option2.message.MessageDeDonnees;
 
+import java.awt.*;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -43,6 +47,7 @@ public class Emetteur implements Runnable {
         String urlJDBCMYSQL = "jdbc:mysql://localhost:3306/sakila";
 
         //Chargement du driver pour la JDBC MYSQL
+
         try {
             Class.forName(nomDriverJDBCMYSQL);
         } catch (ClassNotFoundException e) {
@@ -57,6 +62,7 @@ public class Emetteur implements Runnable {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Erreur de connexion : JDBCMYSQL");
+            return;
         }
 
         //Utilisation de l'interface statement
@@ -87,7 +93,7 @@ public class Emetteur implements Runnable {
         //Récupération des interactions utilisateurs
         try (Scanner scanner = new Scanner(System.in)) {
             //On envoie tant que l'utilisateur n'a pas tapé FIN
-            System.out.println("Tapez 'FIN' pour terminer le programme :");
+            System.out.print("Tapez 'FIN' pour terminer le programme :");
             while (exit) {
                 String input = scanner.nextLine();
                 if ("FIN".equalsIgnoreCase(input)) {
