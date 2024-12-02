@@ -4,9 +4,11 @@ import fr.itii25.option2.message.Message;
 import fr.itii25.option2.message.MessageDeCommande;
 import fr.itii25.option2.message.MessageDeDonnees;
 
+import java.sql.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Recepteur implements Runnable {
+
 
     private LinkedBlockingQueue<Message> canalDeCommunication;
     private boolean exit;
@@ -25,6 +27,8 @@ public class Recepteur implements Runnable {
         else
             System.out.println("Le canal n'a pas été créé");
     }
+
+
 
     public void stop(){
         exit = false;
@@ -90,7 +94,7 @@ public class Recepteur implements Runnable {
             System.exit(-3);
         }
 
-        String requeteSelect = "SELECT * FROM Actor;";
+        String requeteSelect = "SELECT * FROM Actor";
 
         try {
             //On envoie tant que l'utilisateur n'a pas tapé FIN
@@ -134,6 +138,35 @@ public class Recepteur implements Runnable {
                     System.out.println("Commande reçue : " + command);
                     if ("FIN".equals(command)) {
                         System.out.println("Tâche Réceptrice arrêtée.");
+                        int i = 0;
+
+                        ResultSet rs = null;
+                        try {
+                            rs = stmt.executeQuery(requeteSelect);
+
+                        } catch (SQLException e) {
+                            System.out.println("Erreur database SELECT !");
+                            e.printStackTrace(); // affiche les informations sur la pile d'execution en cas de plantage
+                            System.exit(-4);
+                        }
+
+                        try{
+                            while(rs.next()){
+                                String parametres = "";
+                                i++;
+                                int id              = rs.getInt(1);
+                                String FName        = rs.getString(2);
+                                String LName        = rs.getString(3);
+                                Timestamp DateTime  = rs.getTimestamp(4);
+
+                                System.out.println(id+" ,"+FName+" ,"+LName+" ,"+DateTime);
+
+                            }
+
+                            System.out.println("Voici la table actor !");
+                        } catch (SQLException e){
+
+                        }
                         stop();
                     }
                 }
