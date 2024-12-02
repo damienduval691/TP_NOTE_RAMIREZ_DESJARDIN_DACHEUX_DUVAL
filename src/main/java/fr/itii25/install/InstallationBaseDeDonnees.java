@@ -1,4 +1,4 @@
-package fr.itii25.option2.main;
+package fr.itii25.install;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,15 +9,32 @@ public class InstallationBaseDeDonnees {
     public static void main(String[] args) {
         try {
             // Chemin relatif vers le fichier PowerShell
-            String scriptPath = "../../install/TelechargementBaseDeDonnees.ps1";
+            String os = System.getProperty("os.name").toLowerCase();
+            String[] command = {};
 
+            String scriptPath = "";
+
+
+            if(os.contains("win")){
+                scriptPath = System.getProperty("user.dir") + "\\src\\main\\java\\fr\\itii25\\install\\TelechargementBaseDeDonnees.ps1";
+                command = new String[]{
+                        "powershell.exe", // Commande pour PowerShell
+                        "-NoProfile",    // Exécute sans charger le profil utilisateur
+                        "-ExecutionPolicy", "Bypass", // Ignore les restrictions d'exécution
+                        "-File", scriptPath// Chemin relatif du script
+                };
+            }
+            else  {
+                scriptPath = System.getProperty("user.dir") + "\\src\\main\\java\\fr\\itii25\\install\\TelechargementBaseDeDonnees.sh";
+                File scriptFile = new File(scriptPath);
+                 command = new String[]{
+                        "/bin/bash", // Interpréteur Bash
+                        scriptFile.getAbsolutePath()
+                };
+
+            }
             // Commande pour exécuter le script PowerShell
-            String[] command = {
-                    "powershell.exe", // Commande pour PowerShell
-                    "-NoProfile",    // Exécute sans charger le profil utilisateur
-                    "-ExecutionPolicy", "Bypass", // Ignore les restrictions d'exécution
-                    "-File", scriptPath // Chemin relatif du script
-            };
+
 
             // Création du processus
             ProcessBuilder processBuilder = new ProcessBuilder(command);
