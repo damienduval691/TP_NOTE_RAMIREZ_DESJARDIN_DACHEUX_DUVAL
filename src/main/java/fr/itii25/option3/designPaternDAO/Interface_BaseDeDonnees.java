@@ -7,7 +7,7 @@ public interface Interface_BaseDeDonnees {
      * Charge le driver JDBC.
      * @param nomDriver Nom du driver JDBC
      */
-    public void chargerDriver(String nomDriver);
+    public void chargerDriver(String nomDriver) throws ClassNotFoundException;
 
     /**
      * Établit une connexion à la base de données.

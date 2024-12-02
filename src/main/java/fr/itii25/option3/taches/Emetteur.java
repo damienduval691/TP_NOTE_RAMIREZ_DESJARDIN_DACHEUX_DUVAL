@@ -7,6 +7,7 @@ import fr.itii25.option3.message.Message;
 
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -44,9 +45,27 @@ public class Emetteur implements Runnable {
         // Connexion à la base de donnees
         ImplementerBaseDeDonnes dbMySQL = new ImplementerBaseDeDonnes(urlJDBCMYSQL,"sakila","p_ssW0rd") {};
 
-        dbMySQL.chargerDriver("com.mysql.cj.jdbc.Driver");
+        dbMySQL.chargerDriver(nomDriverJDBCMYSQL);
         dbMySQL.connexion();
-        ResultSet rs = null;
+
+        String requeteGetAllActor = "SELECT * FROM actor;";
+        ResultSet rs = dbMySQL.consulterDonnees(requeteGetAllActor);
+
+
+
+        try {
+            //Récupération des données de la tables actor et envoie dans le canal de communication
+            rs = dbMySQL.consulterDonnees(requeteGetAllActor);
+            MessageDeDonnees messageToSend = new MessageDeDonnees(rs);
+            canalDonnees.put(messageToSend); // Envoi d'un message de données
+            System.out.println("Message envoyé.");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+        //Récupération des interactions utilisateurs
         try (Scanner scanner = new Scanner(System.in)) {
             //On envoie tant que l'utilisateur n'a pas tapé FIN
             System.out.println("Tapez 'FIN' pour terminer le programme :");
@@ -54,13 +73,8 @@ public class Emetteur implements Runnable {
                 String input = scanner.nextLine();
                 if ("FIN".equalsIgnoreCase(input)) {
                     MessageDeCommande messageToSend = new MessageDeCommande("FIN");
-                    canalDonnees.put(messageToSend);// Envoi d'un message de commande
+                    canalDonnees.put(messageToSend); // Envoi d'un message de commande
                     stop();
-                } else {
-                    rs = dbMySQL.consulterDonnees("SELECT * FROM actor");
-                    MessageDeDonnees messageToSend = new MessageDeDonnees(rs);
-
-                    canalDonnees.put(messageToSend);// Envoi d'un message de données
                 }
             }
         } catch (InterruptedException E){
