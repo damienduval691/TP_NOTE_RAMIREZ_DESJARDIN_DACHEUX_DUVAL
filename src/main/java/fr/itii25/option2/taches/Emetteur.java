@@ -6,6 +6,7 @@ import fr.itii25.option2.message.MessageDeDonnees;
 
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
+
 import java.sql.*;
 
 public class Emetteur implements Runnable {
@@ -98,15 +99,6 @@ public class Emetteur implements Runnable {
         } catch (InterruptedException E){
             Thread.currentThread().interrupt();
             System.out.println("Interruption du Thread en cours");
-        }
-
-        try {
-            rs.close();
-            stmtMYSQL.close();
-            cxMYSQL.close();
-        } catch (SQLException e) {
-            System.out.println("Erreur de cloture de la JDBC MYSQL.");
-            e.printStackTrace();
         }
     }
 }
