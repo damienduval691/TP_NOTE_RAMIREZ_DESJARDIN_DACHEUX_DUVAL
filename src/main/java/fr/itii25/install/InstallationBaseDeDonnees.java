@@ -16,7 +16,7 @@ public class InstallationBaseDeDonnees {
 
 
             if(os.contains("win")){
-                scriptPath = System.getProperty("user.dir") + "\\src\\main\\java\\fr\\itii25\\install\\TelechargementBaseDeDonnees.ps1";
+                scriptPath = System.getProperty("user.dir") + "src\\main\\java\\fr\\itii25\\install\\TelechargementBaseDeDonnees.ps1";
                 command = new String[]{
                         "powershell.exe", // Commande pour PowerShell
                         "-NoProfile",    // Exécute sans charger le profil utilisateur

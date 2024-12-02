@@ -1,7 +1,5 @@
 package fr.itii25.option2.taches;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.core.DockerClientBuilder;
 import fr.itii25.option2.message.Message;
 import fr.itii25.option2.message.MessageDeCommande;
 import fr.itii25.option2.message.MessageDeDonnees;
