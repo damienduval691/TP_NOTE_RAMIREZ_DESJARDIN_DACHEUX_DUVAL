@@ -5,7 +5,7 @@ echo "Lancement des conteneurs Docker PostgreSQL et SakilaDB/MySQL..."
 
 # Lancer le conteneur PostgreSQL
 echo "Démarrage de PostgreSQL..."
-docker run --rm -it -p 5432:5432 -d POSTGRES_USER="user" -e POSTGRES_PASSWORD="admin" postgres:latest
+docker run --rm -it -p 5432:5432 -d -e POSTGRES_USER="user" -e POSTGRES_PASSWORD="admin" postgres:latest
 
 echo "PostgreSQL arrêté ou terminé."
 
