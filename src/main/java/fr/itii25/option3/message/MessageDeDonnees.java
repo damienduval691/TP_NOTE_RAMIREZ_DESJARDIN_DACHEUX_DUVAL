@@ -1,9 +1,5 @@
 package fr.itii25.option3.message;
 
-
-
-
-
 public class MessageDeDonnees<TypeDeMessageDeDonnee> extends Message {
 
     private TypeDeMessageDeDonnee messageDeDonnee;

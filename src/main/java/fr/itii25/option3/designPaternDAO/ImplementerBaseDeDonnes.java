@@ -97,10 +97,13 @@ public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees
 
     /**
      * Consulter les donnees
-     * @param requete Requete de consultation
+     * @param parametres paramètres que l'on veut
+     * @param nameTable nom de la table
      */
-    public ResultSet consulterDonnees(String requete){
-        if(requete != null && !requete.equals("")){
+    public ResultSet consulterDonnees(String parametres, String nameTable){
+
+        if((parametres != null && !parametres.equals(""))&&(nameTable != null && !nameTable.equals(""))){
+            String requete = "SELECT "+parametres+ " FROM " + nameTable +";";
             Statement stmt = null;
             ResultSet rs = null;
             try {

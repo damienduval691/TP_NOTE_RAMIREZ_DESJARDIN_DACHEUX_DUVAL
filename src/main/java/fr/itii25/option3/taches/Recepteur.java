@@ -46,14 +46,27 @@ public class Recepteur implements Runnable {
         dbPostgre.chargerDriver(nomDriverJDBCPostgre);
         dbPostgre.connexion();
 
-        dbPostgre.creerTableau("Actor","" +
+        //Création de toutes les tables nécessaires
+        dbPostgre.creerTableau("actor",
                 "actor_id INT, " +
                 "first_name VARCHAR(50)," +
                 "last_name VARCHAR(50)," +
                 "last_update TIMESTAMP," +
                 "actor_datecre TIMESTAMP");
 
-        String requeteSelect = "SELECT * FROM Actor";
+        dbPostgre.creerTableau("category",
+                "category_id INT, " +
+                "name VARCHAR(25)," +
+                "last_update TIMESTAMP," +
+                "category_datecre TIMESTAMP");
+
+        dbPostgre.creerTableau("city",
+                "city_id INT, " +
+                "city VARCHAR(50)," +
+                "contry_id INT," +
+                "last_update TIMESTAMP," +
+                "city_datecre TIMESTAMP");
+
         ResultSet rs = null;
         try {
             //On envoie tant que l'utilisateur n'a pas tapé les commandes indiquées
@@ -62,65 +75,151 @@ public class Recepteur implements Runnable {
                 String requeteInsert = "";
                 if (message instanceof MessageDeDonnees) {
                     ResultSet values = ((MessageDeDonnees<ResultSet>) message).getMessageDeDonnee();
-                    try {
-                        int i = 0;
-                        String parametres = "";
+                    ResultSetMetaData metaData = values.getMetaData();
+                    if("actor".contains(metaData.getTableName(1))){
+                        try {
+                            int i = 0;
+                            String parametres = "";
 
-                        while (values.next()) {
-                            i++;
-                            int id = values.getInt(1);
-                            String FName = values.getString(2);
-                            String LName = values.getString(3);
-                            Timestamp DateTime = values.getTimestamp(4);
+                            while (values.next()) {
+                                i++;
+                                int id = values.getInt(1);
+                                String FName = values.getString(2);
+                                String LName = values.getString(3);
+                                Timestamp DateTime = values.getTimestamp(4);
 
-                            parametres = "" + id + ",'" + FName + "','" + LName + "','" + DateTime + "',CURRENT_TIMESTAMP";
-                            String structureTableau = "actor_id, first_name, last_name, last_update, actor_datecre";
-                            dbPostgre.insererDeDonnees("ACTOR", structureTableau, parametres);
+                                parametres = "" + id + ",'" + FName + "','" + LName + "','" + DateTime + "',CURRENT_TIMESTAMP";
+                                String structureTableau = "actor_id, first_name, last_name, last_update, actor_datecre";
+                                dbPostgre.insererDeDonnees("actor", structureTableau, parametres);
 
-
+                            }
+                        }catch (SQLException e){
+                            System.out.println("Insert non réussi.");
+                            e.printStackTrace();
                         }
-                    }catch (SQLException e){
-                        System.out.println("Insert non réussi.");
-                        e.printStackTrace();
+                    } else if ("category".contains(metaData.getTableName(1))) {
+                        try {
+                            int i = 0;
+                            String parametres = "";
+
+                            while (values.next()) {
+                                i++;
+                                int id = values.getInt(1);
+                                String Name = values.getString(2);
+                                Timestamp DateTime = values.getTimestamp(3);
+
+                                parametres = "" + id + ",'" + Name + "','" + DateTime + "',CURRENT_TIMESTAMP";
+                                String structureTableau = "category_id, name, last_update, category_datecre";
+                                dbPostgre.insererDeDonnees("category", structureTableau, parametres);
+
+                            }
+                        }catch (SQLException e){
+                            System.out.println("Insert non réussi.");
+                            e.printStackTrace();
+                        }
+
+                    } else if ("city".contains(metaData.getTableName(1))) {
+                        try {
+                            int i = 0;
+                            String parametres = "";
+
+                            while (values.next()) {
+                                i++;
+                                int id = values.getInt(1);
+                                String city = values.getString(2);
+                                int city_ID = values.getInt(3);
+                                Timestamp DateTime = values.getTimestamp(4);
+
+                                parametres = "" + id + ",'" + city + "','" + city_ID + "','" + DateTime + "',CURRENT_TIMESTAMP";
+                                String structureTableau = "city_id, city, contry_id, last_update, city_datecre";
+                                dbPostgre.insererDeDonnees("city", structureTableau, parametres);
+
+                            }
+                        }catch (SQLException e){
+                            System.out.println("Insert non réussi.");
+                            e.printStackTrace();
+                        }
                     }
 
+
                 } else if (message instanceof MessageDeCommande) {
+                    //On récupère, en string, le string de la commande : ex : 2.actor ou encore 3.city
                     String command = ((MessageDeCommande) message).getMessageDeCommande();
-                    System.out.println("Commande reçue : " + command);
-                    if ("FIN".equals(command)) {
+                    if ("FIN".equals(command)) {    //On passe au message de commande FIN : on finit le programme
                         System.out.println("Tâche Réceptrice arrêtée.");
                         stop();
-                    } else if ("2".equals(command)) {
+                    } else if (command.contains("2")) { //On passe au message de commande 2 : Visualisation des donénes d'un table
+                        //On récupère l'index où le . se situe, et grâce à ça, on peut récupérer le nom de la table à l'aide du substring
+                        int dotIndex = command.indexOf('.');
+                        String tableName = command.substring(dotIndex + 1);
+
                         int i = 0;
 
                         rs = null;
-                        rs = dbPostgre.consulterDonnees(requeteSelect);
+                        //On récupère la table
+                        rs = dbPostgre.consulterDonnees("*", tableName);
+                        System.out.println("Voici le contenue de la table "+ tableName+" : ");
+                        //Ce switch nous permet de passer d'une table à l'autre, pour récupérer les données voulues
                         try{
-                            System.out.println("Voici le contenue de la table ACTOR : ");
-                            while(rs.next()){
-                                String parametres = "";
-                                i++;
-                                int id              = rs.getInt(1);
-                                String FName        = rs.getString(2);
-                                String LName        = rs.getString(3);
-                                Timestamp DateTime  = rs.getTimestamp(4);
+                            //Selon la table passée, on affiche le contenu de la table
+                            switch (tableName){
+                                case "actor":
+                                    while(rs.next()){
+                                        i++;
+                                        int id              = rs.getInt(1);
+                                        String FName        = rs.getString(2);
+                                        String LName        = rs.getString(3);
+                                        Timestamp DateTime  = rs.getTimestamp(4);
+                                        Timestamp datecre   = rs.getTimestamp(5);
 
-                                System.out.println(id+" ,"+FName+" ,"+LName+" ,"+DateTime);
+                                        System.out.println(id+" | "+FName+" | "+LName+" | "+DateTime + " | "+datecre);
+                                    }
+                                case "category":
+                                    while(rs.next()){
+                                        i++;
+                                        int id                      = rs.getInt(1);
+                                        String Name                 = rs.getString(2);
+                                        Timestamp last_update       = rs.getTimestamp(3);
+                                        Timestamp datecre           = rs.getTimestamp(4);
+
+
+                                        System.out.println(id+" | "+Name+" | "+last_update+" | "+datecre);
+                                    }
+                                case "city":
+                                    while(rs.next()){
+                                        i++;
+                                        int id                  = rs.getInt(1);
+                                        String city             = rs.getString(2);
+                                        int contry_id           = rs.getInt(3);
+                                        Timestamp last_update   = rs.getTimestamp(4);
+                                        Timestamp datecre      = rs.getTimestamp(5);
+
+                                        System.out.println(id+" | "+city+" | "+contry_id+" | "+last_update + " | " + datecre);
+                                    }
+                                default:
+                                    break;
                             }
-                            System.out.println("Fin du contenue de la table ACTOR.");
+
+                            System.out.println("Fin du contenue de la table "+ tableName +".");
                         } catch (SQLException e){
                             System.out.println("Une erreur est survenue lors de l'affichage des données !");
                             e.printStackTrace();
                         }
-                    } else if ("3".equals(command)) {
-                        dbPostgre.effacerDonnees("ACTOR");
-                        System.out.println("Le contenu de la table ACTOR a été effacé !");
-                    }
+                    } else if (command.contains("3")) {
+                        int dotIndex = command.indexOf('.');
+                        String tableName = command.substring(dotIndex + 1);
+
+                        dbPostgre.effacerDonnees(tableName);
+                        System.out.println("Le contenu de la table "+ tableName +" a été effacé !");
+                    }else
+                        System.out.println("Commande inconnue.");
                 }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.out.println("Tâche Réceptrice interrompue.");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
         dbPostgre.disconnect();

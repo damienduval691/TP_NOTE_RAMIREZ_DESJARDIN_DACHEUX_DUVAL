@@ -31,6 +31,14 @@ public class Emetteur implements Runnable {
             System.out.println("Le canal n'a pas été créé");
     }
 
+    private void sendMsg(Message message) {
+        try {
+            canalDonnees.put(message);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void stop(){
         exit = false;
     }
@@ -48,41 +56,12 @@ public class Emetteur implements Runnable {
         dbMySQL.chargerDriver(nomDriverJDBCMYSQL);
         dbMySQL.connexion();
 
-        String requeteGetAllActor = "SELECT * FROM actor;";
         ResultSet rs = null;
 
         //Récupération des interactions utilisateurs
         try (Scanner scanner = new Scanner(System.in)) {
             //On donne des options de commande à l'utilisateur :
-            System.out.println("1 - Lancez l'acquisition des données");
-            System.out.println("2 - Afficher les données de la table de réception");
-            System.out.println("3 - Supprimez les données de la table de réception");
-            System.out.println("FIN - Terminer le programme");
-            System.out.print("Choisissez une option : ");
             while (exit) {
-                String input = scanner.nextLine();
-                if ("FIN".equalsIgnoreCase(input)) {
-                    MessageDeCommande messageToSend = new MessageDeCommande("FIN");
-                    canalDonnees.put(messageToSend); // Envoi d'un message de commande
-                    stop();
-                } else if ("1".equalsIgnoreCase(input)) {
-                    try {
-                        //Récupération des données de la tables actor et envoie dans le canal de communication
-                        rs = dbMySQL.consulterDonnees(requeteGetAllActor);
-                        MessageDeDonnees messageToSend = new MessageDeDonnees(rs);
-                        canalDonnees.put(messageToSend); // Envoi d'un message de données
-                        System.out.println("Message envoyé.");
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else if ("2".equalsIgnoreCase(input)) {
-                    MessageDeCommande messageToSend = new MessageDeCommande("2");
-                    canalDonnees.put(messageToSend); // Envoi d'un message de commande
-                } else if ("3".equalsIgnoreCase(input)) {
-                MessageDeCommande messageToSend = new MessageDeCommande("3");
-                canalDonnees.put(messageToSend); // Envoi d'un message de commande
-                }
-                Thread.sleep(10);
                 System.out.println("");
                 System.out.println("#######################################################");
                 System.out.println("");
@@ -91,6 +70,88 @@ public class Emetteur implements Runnable {
                 System.out.println("3 - Supprimez les données de la table de réception");
                 System.out.println("FIN - Terminer le programme");
                 System.out.print("Choisissez une option : ");
+
+
+                String input = scanner.nextLine();
+                if ("FIN".equalsIgnoreCase(input)) {
+                    MessageDeCommande messageToSend = new MessageDeCommande("FIN");
+                    canalDonnees.put(messageToSend); // Envoi d'un message de commande
+                    stop();
+                } else if ("1".equalsIgnoreCase(input)) {
+                    //Récupération des données de la tables actor et envoie dans le canal de communication
+                    System.out.println("Acquisition des données : ");
+                    System.out.println("Sélectionnez la table voulue : ");
+                    System.out.println("1 = actor, 2 = category, 3 = city ");
+                    System.out.print("Votre choix : ");
+                    String choix = scanner.nextLine();
+                    switch (choix) {
+                        case "1":
+                            sendMsg(new MessageDeDonnees<ResultSet>(dbMySQL.consulterDonnees("*", "actor")));
+                            break;
+
+                        case "2":
+                            sendMsg(new MessageDeDonnees<ResultSet>(dbMySQL.consulterDonnees("*", "category")));
+                            break;
+
+                        case "3":
+                            sendMsg(new MessageDeDonnees<ResultSet>(dbMySQL.consulterDonnees("*", "city")));
+                            break;
+                        default:
+                            System.out.println("Vous avez saisi un mauvais identifiant. Veuillez recommencer.");
+                            break;
+                    }
+                } else if ("2".equalsIgnoreCase(input)) { //On vérifie
+                    System.out.println("Visualisation des données : ");
+                    System.out.println("Sélectionnez la table voulue : ");
+                    System.out.println("1 = actor, 2 = category, 3 = city ");
+                    System.out.print("Votre choix : ");
+
+                    String choix = scanner.nextLine();
+                    String choixTable = "";
+                    switch (choix) {
+                        case "1":
+                            sendMsg(new MessageDeCommande("2.actor"));
+                            break;
+
+                        case "2":
+                            sendMsg(new MessageDeCommande("2.category"));
+                            break;
+
+                        case "3":
+                            sendMsg(new MessageDeCommande("2.city"));
+                            break;
+                        default:
+                            System.out.println("Vous avez saisi un mauvais identifiant. Veuillez resélectionner recommencer.");
+                            break;
+                    }
+
+                } else if ("3".equalsIgnoreCase(input)) {
+                    System.out.println("Suppression des données : ");
+                    System.out.println("Sélectionnez la table voulue : ");
+                    System.out.println("1 = actor, 2 = category, 3 = city ");
+                    System.out.print("Votre choix : ");
+
+                    String choix = scanner.nextLine();
+                    String choixTable = "";
+                    switch (choix) {
+                        case "1":
+                            sendMsg(new MessageDeCommande("3.actor"));
+                            break;
+
+                        case "2":
+                            sendMsg(new MessageDeCommande("3.category"));
+                            break;
+
+                        case "3":
+                            sendMsg(new MessageDeCommande("3.city"));
+                            break;
+                        default:
+                            System.out.println("Vous avez saisi un mauvais identifiant. Veuillez resélectionner recommencer.");
+                            break;
+                    }
+                } else
+                    System.out.println("Identifiant inconnu.");
+                Thread.sleep(100);
             }
         } catch (InterruptedException E){
             Thread.currentThread().interrupt();

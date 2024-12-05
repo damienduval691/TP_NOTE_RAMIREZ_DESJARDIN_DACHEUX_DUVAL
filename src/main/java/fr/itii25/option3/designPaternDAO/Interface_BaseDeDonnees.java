@@ -32,10 +32,11 @@ public interface Interface_BaseDeDonnees {
 
     /**
      * Consulter les donnees à travers d'un requete
-     * @param requete Requete de consultation
+     * @param parametres paramètre de la requete : champ que l'on veut récupérer
+     * @param nameTable nom de la table que l'on veut récupérer
      * @return ResultSet Objet ResultSet de la consultation de la requete
      */
-    public ResultSet consulterDonnees(String requete) throws SQLException;
+    public ResultSet consulterDonnees(String parametres, String nameTable) throws SQLException;
 
     public void insererDeDonnees(String nomTableau, String structureTableau, String donneesTableau) throws SQLException;
 

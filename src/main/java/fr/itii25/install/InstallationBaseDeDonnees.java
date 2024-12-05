@@ -14,15 +14,17 @@ public class InstallationBaseDeDonnees {
 
             String scriptPath = "";
 
-
+            String chemin = File.separator + "src"
+                    + File.separator + "main"
+                    + File.separator + "java"
+                    + File.separator + "fr"
+                    + File.separator + "itii25"
+                    + File.separator + "install"
+                    + File.separator;
+            //On regarde l'os sur lequel le programme est lancé, et on récupère le bon fichier
             if(os.contains("win")){
                 scriptPath = System.getProperty("user.dir")
-                        + File.separator + "src"
-                        + File.separator + "main"
-                        + File.separator + "java"
-                        + File.separator + "fr"
-                        + File.separator + "itii25"
-                        + File.separator + "install"
+                        + chemin
                         + File.separator + "TelechargementBaseDeDonnees.ps1";
                 command = new String[]{
                         "powershell.exe", // Commande pour PowerShell
@@ -33,12 +35,7 @@ public class InstallationBaseDeDonnees {
             }
             else  {
                 scriptPath = System.getProperty("user.dir")
-                        + File.separator + "src"
-                        + File.separator + "main"
-                        + File.separator + "java"
-                        + File.separator + "fr"
-                        + File.separator + "itii25"
-                        + File.separator + "install"
+                        + chemin
                         + File.separator + "TelechargementBaseDeDonnees.sh";
 
                 File scriptFile = new File(scriptPath);
@@ -48,7 +45,7 @@ public class InstallationBaseDeDonnees {
                 };
 
             }
-            // Commande pour exécuter le script PowerShell
+
 
 
             // Création du processus

@@ -13,15 +13,18 @@ public class LancementDesConteneursDocker {
 
             String scriptPath = "";
 
+            String chemin = File.separator + "src"
+                    + File.separator + "main"
+                    + File.separator + "java"
+                    + File.separator + "fr"
+                    + File.separator + "itii25"
+                    + File.separator + "install"
+                    + File.separator;
+
 
             if(os.contains("win")){
                 scriptPath = System.getProperty("user.dir")
-                        + File.separator + "src"
-                        + File.separator + "main"
-                        + File.separator + "java"
-                        + File.separator + "fr"
-                        + File.separator + "itii25"
-                        + File.separator + "install"
+                        + chemin
                         + File.separator + "ChargementDesConteneursDockers.ps1";
                 command = new String[]{
                         "powershell.exe", // Commande pour PowerShell
@@ -32,12 +35,7 @@ public class LancementDesConteneursDocker {
             }
             else  {
                 scriptPath = System.getProperty("user.dir")
-                        + File.separator + "src"
-                        + File.separator + "main"
-                        + File.separator + "java"
-                        + File.separator + "fr"
-                        + File.separator + "itii25"
-                        + File.separator + "install"
+                        + chemin
                         + File.separator + "ChargementDesConteneursDockers.sh";
                 File scriptFile = new File(scriptPath);
 
