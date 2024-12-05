@@ -93,7 +93,7 @@ public class Recepteur implements Runnable {
                                 dbPostgre.insererDeDonnees("actor", structureTableau, parametres);
 
                             }
-                            System.out.println("Insertion de la base réussie.");
+                            //System.out.println("Insertion de la base réussie.");
                         }catch (SQLException e){
                             System.out.println("Insert non réussi.");
                             e.printStackTrace();
@@ -114,7 +114,7 @@ public class Recepteur implements Runnable {
                                 dbPostgre.insererDeDonnees("category", structureTableau, parametres);
 
                             }
-                            System.out.println("Insertion de la base réussie.");
+                            //System.out.println("Insertion de la base réussie.");
                         }catch (SQLException e){
                             System.out.println("Insert non réussi.");
                             e.printStackTrace();
@@ -138,7 +138,7 @@ public class Recepteur implements Runnable {
 
                             }
 
-                            System.out.println("Insertion de la base réussie.");
+                            //System.out.println("Insertion de la base réussie.");
                         }catch (SQLException e){
                             System.out.println("Insert non réussi.");
                             e.printStackTrace();

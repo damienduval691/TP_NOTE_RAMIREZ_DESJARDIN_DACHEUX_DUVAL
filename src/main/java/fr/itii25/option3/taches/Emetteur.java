@@ -152,7 +152,7 @@ public class Emetteur implements Runnable {
                     }
                 } else
                     System.out.println("Identifiant inconnu.");
-                Thread.sleep(100);
+                Thread.sleep(200);
             }
         } catch (InterruptedException E){
             Thread.currentThread().interrupt();
