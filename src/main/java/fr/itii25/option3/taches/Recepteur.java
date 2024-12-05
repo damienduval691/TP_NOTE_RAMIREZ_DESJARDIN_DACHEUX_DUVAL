@@ -93,6 +93,7 @@ public class Recepteur implements Runnable {
                                 dbPostgre.insererDeDonnees("actor", structureTableau, parametres);
 
                             }
+                            System.out.println("Insertion de la base réussie.");
                         }catch (SQLException e){
                             System.out.println("Insert non réussi.");
                             e.printStackTrace();
@@ -108,11 +109,12 @@ public class Recepteur implements Runnable {
                                 String Name = values.getString(2);
                                 Timestamp DateTime = values.getTimestamp(3);
 
-                                parametres = "" + id + ",'" + Name + "','" + DateTime + "',CURRENT_TIMESTAMP";
+                                parametres = id + ",'" + Name + "','" + DateTime + "',CURRENT_TIMESTAMP";
                                 String structureTableau = "category_id, name, last_update, category_datecre";
                                 dbPostgre.insererDeDonnees("category", structureTableau, parametres);
 
                             }
+                            System.out.println("Insertion de la base réussie.");
                         }catch (SQLException e){
                             System.out.println("Insert non réussi.");
                             e.printStackTrace();
@@ -135,6 +137,8 @@ public class Recepteur implements Runnable {
                                 dbPostgre.insererDeDonnees("city", structureTableau, parametres);
 
                             }
+
+                            System.out.println("Insertion de la base réussie.");
                         }catch (SQLException e){
                             System.out.println("Insert non réussi.");
                             e.printStackTrace();
@@ -185,6 +189,7 @@ public class Recepteur implements Runnable {
 
                                         System.out.println(id+" | "+Name+" | "+last_update+" | "+datecre);
                                     }
+
                                 case "city":
                                     while(rs.next()){
                                         i++;
@@ -199,8 +204,10 @@ public class Recepteur implements Runnable {
                                 default:
                                     break;
                             }
-
-                            System.out.println("Fin du contenue de la table "+ tableName +".");
+                            if(i==0)
+                                System.out.println("La table est vide.");
+                            else
+                                System.out.println("Fin du contenue de la table "+ tableName +".");
                         } catch (SQLException e){
                             System.out.println("Une erreur est survenue lors de l'affichage des données !");
                             e.printStackTrace();

@@ -94,6 +94,7 @@ public class Emetteur implements Runnable {
             System.out.print("Tapez 'FIN' pour terminer le programme :");
             while (exit) {
                 String input = scanner.nextLine();
+                input=input.replaceAll("\\s+", "");
                 if ("FIN".equalsIgnoreCase(input)) {
                     MessageDeCommande messageToSend = new MessageDeCommande("FIN");
                     canalDonnees.put(messageToSend); // Envoi d'un message de commande

@@ -73,6 +73,7 @@ public class Emetteur implements Runnable {
 
 
                 String input = scanner.nextLine();
+                input=input.replaceAll("\\s+", "");
                 if ("FIN".equalsIgnoreCase(input)) {
                     MessageDeCommande messageToSend = new MessageDeCommande("FIN");
                     canalDonnees.put(messageToSend); // Envoi d'un message de commande
@@ -121,7 +122,7 @@ public class Emetteur implements Runnable {
                             sendMsg(new MessageDeCommande("2.city"));
                             break;
                         default:
-                            System.out.println("Vous avez saisi un mauvais identifiant. Veuillez resélectionner recommencer.");
+                            System.out.println("Vous avez saisi un mauvais identifiant. Veuillez recommencer.");
                             break;
                     }
 
@@ -146,7 +147,7 @@ public class Emetteur implements Runnable {
                             sendMsg(new MessageDeCommande("3.city"));
                             break;
                         default:
-                            System.out.println("Vous avez saisi un mauvais identifiant. Veuillez resélectionner recommencer.");
+                            System.out.println("Vous avez saisi un mauvais identifiant. Veuillez recommencer.");
                             break;
                     }
                 } else
