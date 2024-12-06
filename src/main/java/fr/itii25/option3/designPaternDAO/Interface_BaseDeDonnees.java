@@ -22,25 +22,55 @@ public interface Interface_BaseDeDonnees {
 
 
     /**
-     * Méthode pour créer une table.
      * Création d'une table
+     * @param nomTableau Nom de la table à créer
+     * @param structureTableau Structure de la table à créer
      * Exemple d'application :
-     * String structureTableau = "id SERIAL PRIMARY KEY, nom VARCHAR(50), age INTEGER";
-     * dbConnection.creerTableau("Personnes", structureTableau);
+     * dbConnection.createTable(maTable,structureTable);
+     * dbConnection.createTable("Personnes","id SERIAL PRIMARY KEY, nom VARCHAR(50), age INTEGER");
+     * Rêquete type :
+     *                       CREATE TABLE IF NOT EXISTS maTable (structureTable)
+     *                       CREATE TABLE IF NOT EXISTS Personnes (id SERIAL PRIMARY KEY, nom VARCHAR(50), age INTEGER)
      */
     public void creerTableau(String nomTableau, String structureTableau) throws SQLException;
 
     /**
-     * Consulter les donnees à travers d'un requete
-     * @param parametres paramètre de la requete : champ que l'on veut récupérer
-     * @param nameTable nom de la table que l'on veut récupérer
-     * @return ResultSet Objet ResultSet de la consultation de la requete
+     * Consulte les donnees d'une table
+     * @param parametres paramètres que l'on veut
+     * @param nameTable nom de la table
+     *
+     * Exemple d'application :
+     * bConnection.createTable(parametres,String nameTable);
+     * bConnection.createTable("*","actor");
+     * Rêquete type :
+     *                  SELECT parametres FROM nameTable
+     *                  SELECT * FROM actor ;
      */
     public ResultSet consulterDonnees(String parametres, String nameTable) throws SQLException;
-
-    public void insererDeDonnees(String nomTableau, String structureTableau, String donneesTableau) throws SQLException;
-
-    public void effacerDonnees(String requete) throws SQLException;
+    /**
+     * Inserer de donnees dans un tableau
+     * @param maTable nom du Tableau
+     * @param structureTableau structure du Tableau
+     * @param donneesTableau donnees du Tableau
+     * Exemple d'application :
+     *                       dbConnection.insererDeDonnees(maTable,structureTable,donneesTableay);
+     *                       dbConnection.insererDeDonnees("category","12, type1");
+     * Rêquete type :
+     *                       INSERT INTO maTable (structureTable) VALUES (donneesTableau)
+     *                       INSERT INTO categoru (category_id, name) VALUES (12, type1)
+     */
+    public void insererDeDonnees(String maTable, String structureTableau, String donneesTableau) throws SQLException;
+    /**
+     * Effacer un tableau
+     * @param maTable nom du Tableau
+     * Exemple d'application :
+     *                       dbConnection.effacerDonnees(maTable);
+     *                       dbConnection.insererDeDonnees("category");
+     * Rêquete type :
+     *                       DELETE FROM maTable
+     *                       DELETE FROM categoru
+     */
+    public void effacerDonnees(String maTable) throws SQLException;
     /**
      * Ferme la connexion à la base de données.
      */

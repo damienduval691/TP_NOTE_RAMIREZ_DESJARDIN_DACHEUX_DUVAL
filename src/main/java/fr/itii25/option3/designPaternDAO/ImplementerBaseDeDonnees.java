@@ -1,16 +1,26 @@
 package fr.itii25.option3.designPaternDAO;
 import java.sql.*;
 
-public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees {
-    /**
-     * Informations de connexion.
-     */
-    private String urlJDBC; // URL de la base de données
-    private String utilisateur; // Nom d'utilisateur
-    private String password; // Mot de passe
-    private Connection connection; // Objet Connection
 
-    public ImplementerBaseDeDonnes(String urlJDBC, String utilisateur, String password) {
+public abstract class ImplementerBaseDeDonnees implements Interface_BaseDeDonnees {
+    /**
+     * Informations pour la connexion à la base de donnees
+     */
+    private String urlJDBC;
+    private String utilisateur;
+    private String password;
+    private Connection connection;
+
+    /**
+     * Constructeur d'ImplementerBaseDeDonnees
+     * @param urlJDBC Nom du driver JDBC
+     * @param utilisateur Nom de l'utilisateur de la base de donnees
+     * @param password Mot de passe de la base de donnees
+     *
+     * Exemple d'utilisation ("jdbc:mysql://localhost:3306/user","user","password")
+    */
+
+    public ImplementerBaseDeDonnees(String urlJDBC, String utilisateur, String password) {
         this.urlJDBC = urlJDBC;
         this.utilisateur = utilisateur;
         this.password = password;
@@ -38,7 +48,8 @@ public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees
      */
     public Connection connexion() {
         try {
-            if (connection == null || connection.isClosed()) {
+            // On vérifie si on est déjà connecté
+            if (!isConnected()) {
                 connection = DriverManager.getConnection(urlJDBC, utilisateur, password);
             }
         } catch (SQLException e) {
@@ -49,7 +60,8 @@ public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees
     }
 
     /**
-     * Méthode pour vérifier l'état de la connexion.
+     * Vérifie si la connexion à la base de données est fait
+     * @return true si connecté, false sinon.
      */
 
     public boolean isConnected() {
@@ -76,11 +88,15 @@ public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees
     }
 
     /**
-     * Méthode pour créer une table.
      * Création d'une table
+     * @param maTable Nom de la table à créer
+     * @param structureTable Structure de la table à créer
      * Exemple d'application :
-     * String structureTableau = "id SERIAL PRIMARY KEY, nom VARCHAR(50), age INTEGER";
-     * dbConnection.createTable("Personnes", structureTableau);
+     * dbConnection.createTable(maTable,structureTable);
+     * dbConnection.createTable("Personnes","id SERIAL PRIMARY KEY, nom VARCHAR(50), age INTEGER");
+     * Rêquete type :
+     *                       CREATE TABLE IF NOT EXISTS maTable (structureTable)
+     *                       CREATE TABLE IF NOT EXISTS Personnes (id SERIAL PRIMARY KEY, nom VARCHAR(50), age INTEGER)
      */
     public void creerTableau(String maTable, String structureTable) {
         if((maTable != null && !maTable.equals(""))&&(structureTable != null && !structureTable.equals(""))){
@@ -96,9 +112,16 @@ public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees
     }
 
     /**
-     * Consulter les donnees
+     * Consulte les donnees d'une table
      * @param parametres paramètres que l'on veut
      * @param nameTable nom de la table
+     *
+     * Exemple d'application :
+     * bConnection.createTable(parametres,String nameTable);
+     * bConnection.createTable("*","actor");
+     * Rêquete type :
+     *                  SELECT parametres FROM nameTable
+     *                  SELECT * FROM actor ;
      */
     public ResultSet consulterDonnees(String parametres, String nameTable){
 
@@ -116,7 +139,7 @@ public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees
             }
             return rs;
         } else {
-            System.out.println("La requête passée est vide / null");
+            System.out.println("L'un des paramètres est vide / null");
             return null;
         }
     }
@@ -127,6 +150,12 @@ public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees
      * @param maTable nom du Tableau
      * @param structureTableau structure du Tableau
      * @param donneesTableau donnees du Tableau
+     * Exemple d'application :
+     *                       dbConnection.insererDeDonnees(maTable,structureTable,donneesTableay);
+     *                       dbConnection.insererDeDonnees("category","12, type1");
+     * Rêquete type :
+     *                       INSERT INTO maTable (structureTable) VALUES (donneesTableau)
+     *                       INSERT INTO categoru (category_id, name) VALUES (12, type1)
      */
     public void insererDeDonnees(String maTable, String structureTableau, String donneesTableau) {
         if((maTable != null && !maTable.equals(""))
@@ -142,7 +171,16 @@ public abstract class ImplementerBaseDeDonnes implements Interface_BaseDeDonnees
         } else
             System.out.println("Attention, l'un des paramètres rentré est null / vide");
     }
-
+    /**
+     * Effacer un tableau
+     * @param maTable nom du Tableau
+     * Exemple d'application :
+     *                       dbConnection.effacerDonnees(maTable);
+     *                       dbConnection.insererDeDonnees("category");
+     * Rêquete type :
+     *                       DELETE FROM maTable
+     *                       DELETE FROM categoru
+     */
     public void effacerDonnees(String maTable){
         if(maTable != null && !maTable.equals("")){
             String query = "DELETE FROM " + maTable;
