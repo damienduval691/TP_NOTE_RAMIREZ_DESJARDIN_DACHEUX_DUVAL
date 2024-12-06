@@ -76,7 +76,8 @@ public class Recepteur implements Runnable {
             //On envoie tant que l'utilisateur n'a pas tapé les commandes indiquées
             while (exit) {
                 Message message = canalDeCommunication.take(); // Récupération du message
-                if(verrou.tryLock()){
+                //if(verrou.tryLock()){
+                    verrou.lock();
                     if (message instanceof MessageDeDonnees) {
                         ResultSet values = ((MessageDeDonnees<ResultSet>) message).getMessageDeDonnee();
                         ResultSetMetaData metaData = values.getMetaData();
@@ -227,7 +228,7 @@ public class Recepteur implements Runnable {
                             System.out.println("Commande inconnue.");
                     }
                     verrou.unlock();
-                }
+                //}
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
