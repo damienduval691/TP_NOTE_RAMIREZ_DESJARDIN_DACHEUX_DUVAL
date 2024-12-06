@@ -213,7 +213,7 @@ public class Recepteur implements Runnable {
                                 if(i==0)
                                     System.out.println("La table est vide.");
                                 else
-                                    System.out.println("Fin du contenue de la table "+ tableName +".");
+                                    System.out.println("\nFin du contenue de la table "+ tableName +". Il y a " + i + " ligne(s).");
                             } catch (SQLException e){
                                 System.out.println("Une erreur est survenue lors de l'affichage des données !");
                                 e.printStackTrace();

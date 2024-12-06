@@ -67,7 +67,7 @@ public class Emetteur implements Runnable {
                 //On vérifie que le verrou est vérouillable, si oui il se lock
                 if(verrou.tryLock()) {
                     System.out.println("");
-                    System.out.println("#######################################################");
+                    System.out.println("#".repeat(40));
                     System.out.println("1 - Lancez l'acquisition des données");
                     System.out.println("2 - Afficher les données de la table de réception");
                     System.out.println("3 - Supprimez les données de la table de réception");
