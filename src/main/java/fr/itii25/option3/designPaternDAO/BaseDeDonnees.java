@@ -57,9 +57,15 @@ public class BaseDeDonnees {
      */
 
     public BaseDeDonnees(String urlJDBC, String utilisateur, String password) {
-        this.urlJDBC = urlJDBC;
-        this.utilisateur = utilisateur;
-        this.password = password;
+        if((urlJDBC != null) && (!urlJDBC.isBlank()) &&
+           (utilisateur != null) && (!utilisateur.isBlank()) &&
+           (password != null) && (!password.isBlank())) {
+
+            this.urlJDBC = urlJDBC;
+            this.utilisateur = utilisateur;
+            this.password = password;
+        } else
+            System.out.println("Erreur : urlJDBC, utilisateur, password null");
     }
 
 }
