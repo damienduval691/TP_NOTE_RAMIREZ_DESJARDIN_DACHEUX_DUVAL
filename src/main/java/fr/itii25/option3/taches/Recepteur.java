@@ -92,7 +92,7 @@ public class Recepteur implements Runnable {
                                     String LName = values.getString(3);
                                     Timestamp DateTime = values.getTimestamp(4);
 
-                                    parametres = "" + id + ",'" + FName + "','" + LName + "','" + DateTime + "',CURRENT_TIMESTAMP";
+                                    parametres = id + ",'" + FName + "','" + LName + "','" + DateTime + "',CURRENT_TIMESTAMP";
                                     String structureTableau = "actor_id, first_name, last_name, last_update, actor_datecre";
                                     dbPostgre.insererDeDonnees("actor", structureTableau, parametres);
 
@@ -136,7 +136,7 @@ public class Recepteur implements Runnable {
                                     int city_ID = values.getInt(3);
                                     Timestamp DateTime = values.getTimestamp(4);
 
-                                    parametres = "" + id + ",'" + city + "','" + city_ID + "','" + DateTime + "',CURRENT_TIMESTAMP";
+                                    parametres = id + ",'" + city + "','" + city_ID + "','" + DateTime + "',CURRENT_TIMESTAMP";
                                     String structureTableau = "city_id, city, contry_id, last_update, city_datecre";
                                     dbPostgre.insererDeDonnees("city", structureTableau, parametres);
 
