@@ -56,6 +56,7 @@ public class BaseDeDonnees {
      * Exemple d'utilisation ("jdbc:mysql://localhost:3306/user","user","password")
      */
 
+
     public BaseDeDonnees(String urlJDBC, String utilisateur, String password) {
         if((urlJDBC != null) && (!urlJDBC.isBlank()) &&
            (utilisateur != null) && (!utilisateur.isBlank()) &&
